@@ -139,14 +139,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         'nama' => $post["nama"],
         'nip' => $post["nip"],
         'image' => 'dafault.jpg',
-        'wilayah_id' => $post["wilayah_id"],
-        'satker_id' => $post["satker_id"],
+        'wilayah_id' => $post["namaWilayah"],
+        'satker_id' => $post["namaSatker"],
         'golongan' => $post["golongan"],
         'jabatan_terkahir' => $post["jabatan"],
         'pelanggaran_id' => $post["pelanggaran"]
         ];
         
         $this->db->insert('hukdis', $data);
+    }
+
+    public function noTicket (){
+        return $this->no_ticket;
     }
 
 

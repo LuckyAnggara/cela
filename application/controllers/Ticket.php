@@ -11,12 +11,13 @@ class Ticket extends CI_Controller {
 		$this->load->model("data/dataGolongan");
 		$this->load->model("ticket/proses_model");
         $this->load->library('form_validation');
-       
-
+      
 	}
 
 	public function index()
 	{
+		$data['title'] = "HUKDIS";
+		$data['header'] = "HUKDIS";
 		$id = 1;
 		$data['dbase'] = $this->db->get_where('user',['id' => $id])->row_array();
 		$data['wilayah'] = $this->getWilayah->getNamaWilayah();
@@ -38,6 +39,7 @@ class Ticket extends CI_Controller {
         if ($validation->run()==false) {
 
         $id = 1;
+
 		$data['dbase'] = $this->db->get_where('user',['id' => $id])->row_array();
 		$data['wilayah'] = $this->getWilayah->getNamaWilayah();
 		$data['pelanggaran'] = $this->getPelanggaran->getDataPelanggaran();
@@ -56,12 +58,26 @@ class Ticket extends CI_Controller {
         $this->proses_model->save_suratMasuk();
         $this->proses_model->save_ticket();
         $this->proses_model->save_hukdis();
+        redirect('ticket/phase2');
     	}
     }
 
-	public function upload()
+	public function phase2()
 	{
-		$this->proses_model->test();
+		$data['title'] = "HUKDIS";
+		$data['header'] = "HUKDIS";
+		$id = 1;
+		$data['dbase'] = $this->db->get_where('user',['id' => $id])->row_array();
+		$data['wilayah'] = $this->getWilayah->getNamaWilayah();
+		$data['pelanggaran'] = $this->getPelanggaran->getDataPelanggaran();
+		$data['golongan'] = $this->dataGolongan->get_all();
+		$data['no_ticket'] = $this->proses_model->noTicket();
+
+		$this->load->view('templates/header', $data);
+		$this->load->view('templates/topbar',$data);
+		$this->load->view('templates/sidebar', $data);
+		$this->load->view('ticket/phase2', $data);
+		$this->load->view('templates/footer');
 	}
 
 	public function getDataWilayah()
