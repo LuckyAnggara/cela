@@ -1,24 +1,31 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Hukdis extends CI_Controller {
-	
+class Hukdis extends CI_Controller
+
+{
+
+	function __construct()
+	{
+		parent::__construct();
+		if ($this->session->userdata('login') !== 'allow') {
+			redirect(base_url("login"));
+		}
+	}
+
 	public function daftar()
 	{
-		$id = 1;
+		$id = $this->db->get_where('user', ['id' => $this->session->userdata('id')])->row_array();
 		$data = [
-				'header' => 'Daftar Hukdis',
-				'title' => '',
-				'miniTitle' => 'HD',
-				'activeStatus' => 'active',
-				]; 
-		$data['dbase'] = $this->db->get_where('user',['id' => $id])->row_array();
-		$data['hukdis'] = $this->dataHukdis->get_data_hukdis();
-
-
-		$this->load->view('templates/header',$data);
+			'header' => 'Dashboard',
+			'title' => '',
+			'miniTitle' => '',
+			'activeStatus' => 'active',
+		];
+		$data['dbase'] = $this->db->get_where('user', ['id' => $id['id']])->row_array();
+		$this->load->view('templates/header', $data);
 		$this->load->view('templates/topbar', $data);
-		$this->load->view('templates/sidebar',$data);
+		$this->load->view('templates/sidebar', $data);
 		$this->load->view('hukdis/daftar', $data);
 		$this->load->view('templates/footer');
 	}
